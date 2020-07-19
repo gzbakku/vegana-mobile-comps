@@ -26,6 +26,7 @@ module.exports = (parent,data,make_wrapper,val)=>{
       let len = val.length;
       if(data.min){if(len < data.min){wrapper.invalid();return;}}
       if(data.max){if(len > data.max){wrapper.invalid();return;}}
+      if(data.function){data.function(input,val);}
       wrapper.valid();return;
     },
     draw:{

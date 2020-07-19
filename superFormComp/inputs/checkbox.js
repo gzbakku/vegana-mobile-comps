@@ -17,6 +17,7 @@ module.exports = (parent,data,make_wrapper,val)=>{
     parent:wrapper.center,
     class:'comp-super_form-main-form-field-check_box_wrapper-switch',
     function:(id)=>{
+      if(data.function){data.function(main,active);}
       if(active){
         deactivate();
       } else {

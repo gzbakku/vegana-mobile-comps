@@ -42,18 +42,27 @@ module.exports = (parent,data,make_wrapper,val,make_country)=>{
 
   let controllers = {};
 
+  let addressFunc;
+  if(data.function){
+    addressFunc = ()=>{
+      if(validate()){
+        data.function(base_wrapper,compile());
+      }
+    }
+  }
+
   for(let field of fields){
     if(field.type === 'string'){
       let hold = make_string_field(
         make_wrapper,base_wrapper,
-        field.placeholder,val[field.id],field.id,data.required
+        field.placeholder,val[field.id],field.id,data.required,addressFunc
       );
       controllers[field.id] = hold;
     }
     else if(field.type === 'number'){
       let hold = make_number_field(
         make_wrapper,base_wrapper,
-        field.placeholder,val[field.id],field.id,data.required
+        field.placeholder,val[field.id],field.id,data.required,addressFunc
       );
       controllers[field.id] = hold;
     }
@@ -122,7 +131,7 @@ module.exports = (parent,data,make_wrapper,val,make_country)=>{
 
 };
 
-function make_string_field(make_wrapper,parent,placeholder,val,id,required){
+function make_string_field(make_wrapper,parent,placeholder,val,id,required,addressFunc){
 
   const wrapper = make_wrapper(parent,{
     id:id,
@@ -140,6 +149,7 @@ function make_string_field(make_wrapper,parent,placeholder,val,id,required){
       let len = val.length;
       if(len < 1){wrapper.invalid();return;}
       if(len > 512){wrapper.invalid();return;}
+      if(addressFunc){addressFunc();}
       wrapper.valid();return;
     },
     draw:engine.global.object.superFormInputDraw
@@ -175,7 +185,7 @@ function make_string_field(make_wrapper,parent,placeholder,val,id,required){
 
 }
 
-function make_number_field(make_wrapper,parent,placeholder,val,id,required){
+function make_number_field(make_wrapper,parent,placeholder,val,id,required,addressFunc){
 
   const wrapper = make_wrapper(parent,{
     id:id,
@@ -192,6 +202,7 @@ function make_number_field(make_wrapper,parent,placeholder,val,id,required){
       if(!val){wrapper.invalid();return;}
       if(val < 100){wrapper.invalid();return;}
       if(val > 99909990999099909990){wrapper.invalid();return;}
+      if(addressFunc){addressFunc();}
       wrapper.valid();return;
     },
     draw:engine.global.object.superFormInputDraw

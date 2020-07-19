@@ -57,6 +57,7 @@ module.exports = (parent,data,make_wrapper,vals)=>{
       if(data.items.min){if(vals.length < data.items.min){wrapper.invalid();return;}}
       if(data.items.max){if(vals.length > data.items.max){wrapper.invalid();return;}}
     }
+    if(data.function){data.function(snipets_cont,vals);}
     wrapper.valid();return;
   }
 
@@ -157,7 +158,6 @@ function make_snipet(parent,val,remove){
       all:{
         'display': 'inline-block',
         'background-color': engine.global.object.superFormCompFieldColorBgDark,
-        // 'background-color':'white',
         'margin': '5px',
         'border-radius': '5px',
       }
@@ -213,79 +213,5 @@ function make_snipet(parent,val,remove){
           }
         }
       });
-
-}
-
-function make_wrapper_old(parent,data){
-
-  const field = engine.make.div({
-    parent:parent,
-    class:'comp-super_form-main-form-field-choice_wrappper',
-    title:data.info || data.title || data.placeholder || data.anchor
-  });
-
-  const header = engine.make.div({
-    parent:field,
-    class:'comp-super_form-main-form-field-choice_wrappper-header'
-  });
-
-    engine.make.div({
-      parent:header,
-      class:'comp-super_form-main-form-field-choice_wrappper-header-tag',
-      text:data.id,
-    });
-
-    const info_wrapper = engine.make.div({
-      parent:header,
-      class:'comp-super_form-main-form-field-choice_wrappper-header-info_wrapper'
-    });
-
-      engine.make.image({
-        parent:info_wrapper,
-        class:'comp-super_form-main-form-field-choice_wrappper-header-info_wrapper-img',
-        type:'local',
-        location:'assets/images/info.png',
-        function:()=>{
-          let message = '';
-          if(data.id){message += "id : " + data.id + "<br/>"}
-          if(data.type){message += "type : " + data.type + "<br/>"}
-          if(data.min){message += "min snipet length : " + data.min + "<br/>"}
-          if(data.max){message += "max snipet length : " + data.max + "<br/>"}
-          if(data.items){
-            if(data.items.min){message += "min no of snipets : " + data.min + "<br/>"}
-            if(data.items.max){message += "max no of snipets : " + data.max + "<br/>"}
-          }
-          if(data.placeholder){message += "guide : " + data.placeholder + "<br/>"}
-          if(data.info){message += "info : " + data.info + "<br/>"}
-          if(data.anchor){message += "info : " + data.anchor + "<br/>"}
-          if(data.title){message += "info : " + data.title + "<br/>"}
-          engine.global.function.alert({
-            header:'help',
-            message:message,
-            buttons:[
-              {value:'ok',function:(id)=>{
-                engine.view.remove(id);
-              }}
-            ]
-          });
-        }
-      });
-
-  const body = engine.make.div({
-    parent:field,
-    class:'comp-super_form-main-form-field-choice_wrappper-body'
-  });
-
-  return {
-    body:body,
-    valid:()=>{
-      engine.make.addClass({id:info_wrapper,class:'comp-super_form-main-form-field-common-input_wrapper-valid'});
-      engine.make.removeClass({id:info_wrapper,class:'comp-super_form-main-form-field-common-input_wrapper-invalid'});
-    },
-    invalid:()=>{
-      engine.make.addClass({id:info_wrapper,class:'comp-super_form-main-form-field-common-input_wrapper-invalid'});
-      engine.make.removeClass({id:info_wrapper,class:'comp-super_form-main-form-field-common-input_wrapper-valid'});
-    }
-  };
 
 }

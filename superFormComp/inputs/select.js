@@ -44,6 +44,7 @@ function make_select(parent,data,make_wrapper,val){
 
   function update(v){
     val = v;
+    if(data.function){data.function(input,val);}
     engine.set.div.text(input,v);
     wrapper.valid();
   }
@@ -313,121 +314,6 @@ function post_options(bottom,options,choose,active){
         style:'width:100%;'
       });
 
-    }
-
-}
-
-function make_options_old(parent,data,update,active){
-
-  const wrapper = engine.make.div({
-    parent:parent,
-    class:'comp-super_form-main-form-field-common-input_wrapper-input_wrapper-options_wrapper'
-  });
-
-  engine.make.div({
-    parent:wrapper,
-    class:'comp-super_form-main-form-field-common-input_wrapper-input_wrapper-options_wrapper-background',
-    function:()=>{
-      engine.view.remove(wrapper);
-    }
-  });
-
-  const card = engine.make.div({
-    parent:wrapper,
-    class:'comp-super_form-main-form-field-common-input_wrapper-input_wrapper-options_wrapper-options'
-  });
-
-    const top = engine.make.div({
-      parent:card,
-      class:'comp-super_form-main-form-field-common-input_wrapper-input_wrapper-options_wrapper-options-top'
-    });
-
-      engine.make.button({
-        parent:top,
-        class:'comp-super_form-main-form-field-common-input_wrapper-input_wrapper-options_wrapper-options-top-button',
-        value:'close',
-        function:()=>{
-          engine.view.remove(wrapper);
-        }
-      });
-
-    const middle = engine.make.div({
-      parent:card,
-      class:'comp-super_form-main-form-field-common-input_wrapper-input_wrapper-options_wrapper-options-middle'
-    });
-
-      let little_options = [];
-      let little_book = {};
-      for(let option of data.options){
-        little_book[option.toLowerCase()] = option;
-        little_options.push(option.toLowerCase());
-      }
-
-      const Auto = engine.global.function.auto();
-      let autocomplete = Auto.connectAutocomplete();
-      autocomplete.initialize((populate)=>{
-          populate(little_options);
-      });
-
-      engine.make.input({
-        parent:middle,
-        class:'comp-super_form-main-form-field-common-input_wrapper-input_wrapper-options_wrapper-options-middle-input',
-        function:(id,val)=>{
-          let matches = autocomplete.search(val);
-          if(matches.length > 0){
-            let hold = [];
-            for(let item of matches){
-              hold.push(little_book[item]);
-            }
-            reset_options(hold);
-          } else {
-            reset_options(little_options);
-          }
-        }
-      });
-
-      function choose(option){
-        update(option);
-        engine.view.remove(wrapper);
-      }
-
-      function reset_options(otps){
-        new_bottom();
-        post_options(bottom,otps,choose,active,little_book);
-      }
-
-      let bottom;
-      function new_bottom(){
-        if(bottom){engine.view.remove(bottom);}
-        bottom = engine.make.div({
-          parent:card,
-          class:'comp-super_form-main-form-field-common-input_wrapper-input_wrapper-options_wrapper-options-bottom',
-        });
-      }
-
-      new_bottom();
-      post_options(bottom,data.options,choose,active,little_book);
-
-}
-
-function post_options_old(bottom,options,choose,active){
-
-    for(let option of options){
-      const option_wrapper = engine.make.div({
-        parent:bottom,
-        class:'comp-super_form-main-form-field-common-input_wrapper-input_wrapper-options_wrapper-options-bottom-option',
-        text:option,
-        function:()=>{
-          choose(option);
-        }
-      });
-      if(option === active){
-        engine.make.addClass({id:option_wrapper,class:'comp-super_form-main-form-field-common-input_wrapper-input_wrapper-options_wrapper-options-bottom-option-active'});
-      }
-      engine.make.div({
-        parent:bottom,
-        style:'width:100%;'
-      });
     }
 
 }

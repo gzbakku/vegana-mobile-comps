@@ -37,6 +37,9 @@ module.exports = (parent,data,make_wrapper,val,make_options)=>{
         }]);
         engine.set.div.text(id,val);
         code = val;
+        if(verify()){
+          if(data.function){data.function(internal_wrapper,get());}
+        }
       },code);
     },
     draw:{
@@ -71,6 +74,9 @@ module.exports = (parent,data,make_wrapper,val,make_options)=>{
       if(isNaN(val) && len > 0){wrapper.invalid();return;}
       if(len < 5){wrapper.invalid();return;}
       if(len > 15){wrapper.invalid();return;}
+      if(verify()){
+        if(data.function){data.function(internal_wrapper,get());}
+      }
       wrapper.valid();return;
     },
     draw:{
@@ -87,6 +93,38 @@ module.exports = (parent,data,make_wrapper,val,make_options)=>{
       }
     }
   });
+
+  const verify = ()=>{
+    let val = engine.binder.text(input);
+    //verify number
+    if(!code){
+      if(!data.required && !val){
+        wrapper.valid();return true;
+      } else {
+        wrapper.invalid();return false;
+      }
+    }
+    //verify phone
+    if(!val){
+      if(!data.required && !code){
+        wrapper.valid();return true;
+      } else{
+        wrapper.invalid();return false;
+      }
+    }
+    let len = val.toString().length;
+    if(isNaN(val) && len > 0){wrapper.invalid();return false;}
+    if(len < 5){wrapper.invalid();return false;}
+    if(len > 15){wrapper.invalid();return false;}
+    wrapper.valid();return true;
+  };
+
+  const get = ()=>{
+    return {
+      code:code,
+      mobile:engine.binder.number(input)
+    };
+  };
 
   return {
     empty:()=>{
@@ -105,33 +143,8 @@ module.exports = (parent,data,make_wrapper,val,make_options)=>{
         engine.set.input.value(input,val);
       }
     },
-    get:()=>{
-      return {
-        code:code,
-        mobile:engine.binder.number(input)
-      };
-    },
-    verify:()=>{
-      let val = engine.binder.text(input);
-      //verify number
-      if(!code){
-        if(!data.required){
-          wrapper.valid();return true;
-        } else {
-          wrapper.invalid();return false;
-        }
-      }
-      //verify phone
-      if(!val){
-        if(!data.required){wrapper.valid();return true;}
-        else{wrapper.invalid();return false;}
-      }
-      let len = val.toString().length;
-      if(isNaN(val) && len > 0){wrapper.invalid();return false;}
-      if(len < 5){wrapper.invalid();return false;}
-      if(len > 15){wrapper.invalid();return false;}
-      wrapper.valid();return true;
-    }
+    get:get,
+    verify:verify
   };
 
 };

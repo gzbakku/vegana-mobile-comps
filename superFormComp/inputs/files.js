@@ -126,6 +126,7 @@ function make_control(parent,data,wrapper){
       for(let file of collection){
         files.push(make_file(main,file,data,wrapper,validate));
       }
+      if(data.function){data.function(parent,files);}
       validate();
     },
     validate:()=>{

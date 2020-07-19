@@ -276,7 +276,7 @@ module.exports = {
       class:'comp-super_form-main-form-field-check_box_wrapper-right',
       draw:{
         all:{
-          flex: 1,
+          flex: 2,
         }
       }
     });

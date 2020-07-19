@@ -44,6 +44,7 @@ module.exports = (parent,data,make_wrapper,vals)=>{
           buttonObject.style["background-color"] = engine.global.object.superFormCompFieldColorGreen;
           collect.push(option);
         }
+        if(data.function){data.function(base_wrapper,collect);}
         check();
       },
       draw:{

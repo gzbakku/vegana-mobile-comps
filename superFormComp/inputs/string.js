@@ -43,6 +43,7 @@ function common(parent,data,make_wrapper,val,type){
       if(type === "email"){
         if(!engine.validate.email(val)){wrapper.invalid();return;}
       }
+      if(data.function){data.function(input,val);}
       wrapper.valid();return;
     },
     draw:engine.global.object.superFormInputDraw
