@@ -96,5 +96,40 @@ all are free to use and customizable to your needs.
 
 feel free to add your own to this collection just make pull requests.
 
+### Form Comp - superFormComp
+
+simple form which can register string, number, mobile, address, choice, checkbox, textarea, snipets etc.  
+
+```js
+const superFormComp = require("./comps/superFormComp/comp");
+superFormComp.init('parentId',{
+    form:[
+      {id:'name',type:'string',required:true,min:3,max:256,placeholder:'name',info:'your name'},
+      {id:'email',type:'email',required:true,min:3,max:1024,placeholder:'email'},
+      {id:'age',type:'number',required:true,min:18,max:56,placeholder:'age',info:'only young and middle age adults.'},
+      {id:'invitation',type:'checkbox',info:'do you wanna joing the party.',function:()=>{
+        console.log('checkbox clicked');
+      }},
+      {id:'mobile',type:'mobile',placeholder:'mobile',required:false},
+      {id:'country',type:'country',placeholder:'where do you live',required:true},
+      {id:'address',type:'mobile',required:false},
+      {id:'profiles',type:'choice',required:true,options:['fb','insta','email'],min:1,max:2},
+      {id:'food',type:'snipets',required:false,placeholder:'what food do you like?'},
+      {id:'music',type:'textarea',required:false,placeholder:'what music do you like?'},
+      {id:'images',type:'files',required:false,options:[
+        'jpg','png','jpeg','svg','gif'
+      ],size:{
+        //size of upload media in MB
+        total:{min:2,max:32},
+        file:{min:1,max:10}
+      }},
+
+      {id:'submit',type:'button',value:'submit',function:(id,form)=>{
+        console.log(form.get());
+      }},
+    ]
+});
+```
+
 ## License
 MIT
